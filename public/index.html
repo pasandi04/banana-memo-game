@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍌 Banana Memory Game</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Fixed settings bar - Theme & Sound (always visible) -->
+  <div class="settings-bar">
+    <div class="theme-toggle" title="Toggle theme">
+      <button id="theme-btn" class="icon-btn" aria-label="Toggle theme">☀</button>
+      <span class="theme-label">Banana Day</span>
+    </div>
+    <div class="sound-settings">
+      <button id="sound-toggle" class="icon-btn" title="Sound effects">🔊</button>
+      <button id="music-toggle" class="icon-btn" title="Background music">🎵</button>
+      <div class="volume-wrap">
+        <input type="range" id="volume-slider" min="0" max="100" value="70" title="Volume">
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating background animation -->
+  <div class="bg-animation" aria-hidden="true">
+    <span class="float-item float-banana">🍌</span>
+    <span class="float-item float-banana">🍌</span>
+    <span class="float-item float-banana">🍌</span>
+    <span class="float-item float-banana">🍌</span>
+    <span class="float-item float-leaf">🌿</span>
+    <span class="float-item float-leaf">🍃</span>
+    <span class="float-item float-leaf">🌱</span>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 1) AUTHENTICATION SECTION                   -->
+  <!-- Login & Signup - After success → Level Selection -->
+  <!-- ============================================ -->
+  <div id="authSection" class="section card section-visible">
+    <h1>🍌 Banana Memory Game</h1>
+    <p class="subtitle">Memorize the banana, type the answer!</p>
+
+    <div class="auth-tabs">
+      <button id="show-login" class="tab-btn active">Login</button>
+      <button id="show-signup" class="tab-btn">Sign Up</button>
+    </div>
+
+    <form id="login-form" class="auth-form">
+      <input type="email" id="login-email" placeholder="Email" required>
+      <input type="password" id="login-password" placeholder="Password" required>
+      <button type="submit" class="btn btn-primary">Login</button>
+      <p id="auth-error" class="error-msg"></p>
+    </form>
+
+    <form id="signup-form" class="auth-form hidden">
+      <input type="text" id="signup-username" placeholder="Username" required minlength="2">
+      <input type="email" id="signup-email" placeholder="Email" required>
+      <input type="password" id="signup-password" placeholder="Password" required minlength="6">
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+      <p id="signup-error" class="error-msg"></p>
+    </form>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 2) LEVEL SELECTION SECTION                  -->
+  <!-- 3 level cards - Click level → Show Guidelines -->
+  <!-- ============================================ -->
+  <div id="levelSection" class="section hidden">
+    <div class="level-selection-header card">
+      <h1>🍌 Choose Your Level</h1>
+      <p class="subtitle">Welcome, <strong id="welcome-username"></strong>!</p>
+      <button id="logout-btn" class="btn btn-small">Logout</button>
+    </div>
+
+    <div class="level-cards">
+      <div class="level-card" data-level="easy">
+        <span class="level-card-icon">🍌</span>
+        <h3>Easy</h3>
+        <p>5 seconds to memorize</p>
+      </div>
+      <div class="level-card" data-level="medium">
+        <span class="level-card-icon">🍌</span>
+        <h3>Medium</h3>
+        <p>3 seconds to memorize</p>
+      </div>
+      <div class="level-card" data-level="hard">
+        <span class="level-card-icon">🍌</span>
+        <h3>Hard</h3>
+        <p>2 seconds to memorize</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 3) GUIDELINES SECTION                       -->
+  <!-- How To Play - Dynamically updated by level  -->
+  <!-- Start Game button → Game Section            -->
+  <!-- ============================================ -->
+  <div id="guideSection" class="section hidden">
+    <div class="guide-panel card">
+      <h2>📖 How To Play</h2>
+      <div class="guide-content">
+        <p class="guide-level-name" id="guide-level-name">Easy</p>
+        <ul>
+          <li><strong>Time Limit:</strong> <span id="guide-time">5 seconds</span> to memorize each image</li>
+          <li><strong>Objective:</strong> Count the bananas in the image, then type the number</li>
+          <li><strong>Scoring:</strong> <span id="guide-points">1 point</span> per correct answer</li>
+          <li><strong>Rounds:</strong> 5 questions per game</li>
+        </ul>
+      </div>
+      <button id="guide-start-btn" class="btn btn-primary btn-large btn-start-scale">Start Game</button>
+      <button id="back-to-levels" class="btn btn-small">← Back to Levels</button>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 4) GAME SECTION                             -->
+  <!-- Level, Score, Timer, Image, Answer, Result  -->
+  <!-- After game ends → Final score + Leaderboard -->
+  <!-- ============================================ -->
+  <div id="gameSection" class="section hidden">
+    <div class="game-header card">
+      <div class="user-info">
+        <span><strong id="game-username"></strong></span>
+      </div>
+      <div class="stats">
+        <div class="stat-box">
+          <span class="stat-label">Level</span>
+          <span id="level-display" class="stat-value">1</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Score</span>
+          <span id="score-display" class="stat-value">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Timer</span>
+          <span id="timer-display" class="stat-value">5</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="image-container" class="card image-card hidden">
+      <p class="memorize-hint">Memorize this! 🧠</p>
+      <img id="banana-image" src="" alt="Banana puzzle image">
+      <div id="countdown-overlay" class="countdown-overlay hidden">
+        <span id="countdown-number">3</span>
+      </div>
+    </div>
+
+    <div id="answer-section" class="card hidden">
+      <label for="answer-input">What did you see?</label>
+      <input type="text" id="answer-input" placeholder="Type your answer..." autocomplete="off">
+      <button id="submit-answer" class="btn btn-primary">Submit</button>
+    </div>
+
+    <div id="result-message" class="card hidden">
+      <p id="result-text"></p>
+      <p id="result-solution" class="solution-hint"></p>
+    </div>
+
+    <div id="game-over-section" class="card hidden">
+      <h2>🎉 Game Over!</h2>
+      <p>Final Score: <strong id="final-score">0</strong></p>
+      <p>Level Reached: <strong id="final-level">1</strong></p>
+      <button id="play-again-btn" class="btn btn-primary">Play Again</button>
+      <div class="leaderboard">
+        <h3>🏆 Top 5 Leaderboard</h3>
+        <ol id="leaderboard-list"></ol>
+      </div>
+    </div>
+  </div>
+
+  <div id="confetti-container" class="confetti-container" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,802 @@
+/**
+ * ============================================
+ * BANANA MEMORY GAME - CUTE PASTEL THEME
+ * ============================================
+ * 
+ * Design: Pink-purple gradient, rounded cards,
+ * soft shadows, smooth animations, responsive
+ */
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    /* Banana Day Mode - Pastel palette */
+    --bg-gradient-start: #ffd1dc;
+    --bg-gradient-end: #e6d5f5;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-shadow: 0 8px 32px rgba(147, 112, 219, 0.2);
+    --card-shadow-hover: 0 12px 40px rgba(147, 112, 219, 0.3);
+    --primary: #b565a7;
+    --primary-hover: #9b4d8f;
+    --accent: #ffb6c1;
+    --text-dark: #5a4a6a;
+    --text-light: #7d6b8f;
+    --success: #98d8aa;
+    --error: #ff9a9a;
+    --border-radius: 20px;
+    --border-radius-sm: 12px;
+    --input-bg: white;
+    --stat-box-bg: linear-gradient(135deg, #ffb6c1, #ffe4ec);
+    --level-option-bg: linear-gradient(135deg, #fef5f8, #f8f0ff);
+  }
+  
+  /* Jungle Night Mode - Dark theme */
+  body.theme-dark {
+    --bg-gradient-start: #1a2f1a;
+    --bg-gradient-end: #0d1b0d;
+    --card-bg: rgba(30, 50, 30, 0.95);
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --card-shadow-hover: 0 12px 40px rgba(100, 180, 100, 0.2);
+    --primary: #7cb87c;
+    --primary-hover: #5a9a5a;
+    --accent: #4a7c4a;
+    --text-dark: #d4e8d4;
+    --text-light: #9fbf9f;
+    --success: #6ab86a;
+    --error: #e07878;
+    --input-bg: rgba(20, 40, 20, 0.9);
+    --stat-box-bg: linear-gradient(135deg, #2d4a2d, #3d5a3d);
+    --level-option-bg: linear-gradient(135deg, #1e3a1e, #2a4a2a);
+  }
+  
+  /* ============================================ */
+  /* SETTINGS BAR - Theme & Sound (fixed top)     */
+  /* ============================================ */
+  .settings-bar {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    background: var(--card-bg);
+    padding: 10px 16px;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--card-shadow);
+  }
+  
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .theme-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+  
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--accent);
+    background: transparent;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .icon-btn:hover {
+    background: var(--accent);
+    transform: scale(1.08);
+  }
+  
+  .icon-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .icon-btn.muted {
+    opacity: 0.5;
+  }
+  
+  .sound-settings {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .volume-wrap {
+    margin-left: 4px;
+  }
+  
+  #volume-slider {
+    width: 70px;
+    height: 6px;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  
+  body {
+    font-family: "Nunito", sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    color: var(--text-dark);
+    padding: 20px;
+    padding-top: 70px;
+    position: relative;
+    overflow-x: hidden;
+    transition: background 0.5s ease, color 0.3s ease;
+  }
+  
+  /* ============================================ */
+  /* BACKGROUND ANIMATION - Floating bananas      */
+  /* ============================================ */
+  .bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  
+  .float-item {
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.25;
+    animation: floatAround 20s ease-in-out infinite;
+  }
+  
+  .float-banana {
+    animation-name: floatAround;
+    animation-duration: 18s;
+  }
+  
+  .float-leaf {
+    font-size: 2rem;
+    opacity: 0.2;
+    animation-name: floatAround;
+    animation-duration: 22s;
+  }
+  
+  /* Each item has unique position and animation delay */
+  .float-item:nth-child(1) { left: 10%; top: 15%; animation-delay: 0s; }
+  .float-item:nth-child(2) { left: 70%; top: 60%; animation-delay: -4s; }
+  .float-item:nth-child(3) { left: 40%; top: 80%; animation-delay: -8s; }
+  .float-item:nth-child(4) { left: 85%; top: 25%; animation-delay: -2s; }
+  .float-item:nth-child(5) { left: 20%; top: 70%; animation-delay: -6s; }
+  .float-item:nth-child(6) { left: 55%; top: 10%; animation-delay: -3s; }
+  .float-item:nth-child(7) { left: 30%; top: 45%; animation-delay: -7s; }
+  
+  @keyframes floatAround {
+    0%, 100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+      transform: translate(30px, -40px) rotate(15deg);
+    }
+    50% {
+      transform: translate(-20px, 20px) rotate(-10deg);
+    }
+    75% {
+      transform: translate(20px, 30px) rotate(8deg);
+    }
+  }
+  
+  /* ============================================ */
+  /* SECTIONS & LAYOUT                            */
+  /* ============================================ */
+  .section {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    position: relative;
+    z-index: 1;
+    min-height: 50vh;
+  }
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  /* Section visibility - smooth fade transition between screens */
+  .section-visible {
+    animation: sectionFadeIn 0.4s ease-out;
+  }
+  
+  @keyframes sectionFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* ============================================ */
+  /* CARD - Rounded container with soft shadow   */
+  /* ============================================ */
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 30px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+  
+  /* Fade-in animation for sections */
+  .fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* ============================================ */
+  /* TYPOGRAPHY                                   */
+  /* ============================================ */
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 8px;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text-dark);
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--primary);
+  }
+  
+  .subtitle {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 24px;
+    font-size: 1rem;
+  }
+  
+  /* ============================================ */
+  /* AUTH TABS - Login / Signup switch            */
+  /* ============================================ */
+  .auth-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  
+  .tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--accent);
+    background: transparent;
+    border-radius: var(--border-radius-sm);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .tab-btn:hover {
+    background: rgba(255, 182, 193, 0.3);
+  }
+  
+  .tab-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+  
+  /* ============================================ */
+  /* AUTH FORMS                                   */
+  /* ============================================ */
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .auth-form input {
+    padding: 14px 18px;
+    border: 2px solid var(--accent);
+    border-radius: var(--border-radius-sm);
+    font-family: inherit;
+    font-size: 1rem;
+    background: var(--input-bg);
+    color: var(--text-dark);
+    transition: border-color 0.2s ease;
+  }
+  
+  .auth-form input:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+  
+  .error-msg {
+    color: var(--error);
+    font-size: 0.9rem;
+    min-height: 20px;
+  }
+  
+  /* ============================================ */
+  /* BUTTONS                                      */
+  /* ============================================ */
+  .btn {
+    padding: 14px 24px;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  /* Button click animation - satisfying bounce */
+  .btn:active {
+    animation: btnClick 0.15s ease;
+  }
+  
+  @keyframes btnClick {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.96); }
+    100% { transform: scale(1); }
+  }
+  
+  .btn-primary:active {
+    animation: btnClick 0.15s ease;
+  }
+  
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(181, 101, 167, 0.3);
+  }
+  
+  .btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(181, 101, 167, 0.4);
+  }
+  
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+  
+  .btn-small {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    background: var(--accent);
+    color: var(--text-dark);
+  }
+  
+  .btn-small:hover {
+    background: #ffa0ae;
+  }
+  
+  .btn-large {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+  }
+  
+  /* ============================================ */
+  /* LEVEL CARDS - 3 clickable difficulty cards   */
+  /* ============================================ */
+  .level-selection-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  .level-selection-header .subtitle {
+    margin-bottom: 12px;
+  }
+  
+  .level-selection-header .btn-small {
+    margin-top: 8px;
+  }
+  
+  .level-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .level-card {
+    background: var(--level-option-bg);
+    border: 2px solid var(--accent);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .level-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+  }
+  
+  .level-card:active {
+    transform: translateY(-2px) scale(0.99);
+  }
+  
+  .level-card-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  .level-card h3 {
+    margin-bottom: 4px;
+  }
+  
+  .level-card p {
+    font-size: 0.95rem;
+    color: var(--text-light);
+  }
+  
+  /* ============================================ */
+  /* GUIDELINES PANEL - How To Play               */
+  /* ============================================ */
+  .guide-panel {
+    text-align: left;
+  }
+  
+  .guide-panel h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .guide-content {
+    margin-bottom: 24px;
+  }
+  
+  .guide-level-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .guide-content ul {
+    list-style: none;
+  }
+  
+  .guide-content li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(147, 112, 219, 0.2);
+    color: var(--text-dark);
+  }
+  
+  .guide-content li:last-child {
+    border-bottom: none;
+  }
+  
+  .btn-start-scale {
+    margin-bottom: 12px;
+  }
+  
+  .btn-start-scale:active {
+    animation: startBtnScale 0.2s ease;
+  }
+  
+  @keyframes startBtnScale {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.96); }
+    100% { transform: scale(1); }
+  }
+  
+  /* ============================================ */
+  /* COUNTDOWN OVERLAY (optional big countdown)   */
+  /* ============================================ */
+  .countdown-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--border-radius-sm);
+  }
+  
+  #countdown-number {
+    font-size: 4rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* ============================================ */
+  /* GAME HEADER - User info and stats            */
+  /* ============================================ */
+  .game-header {
+    text-align: center;
+  }
+  
+  .user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  /* STATS DISPLAY - Level, Score, Timer         */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .stat-box {
+    background: var(--stat-box-bg);
+    padding: 12px 20px;
+    border-radius: var(--border-radius-sm);
+    min-width: 80px;
+  }
+  
+  .stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+  }
+  
+  /* ============================================ */
+  /* IMAGE CONTAINER - Banana puzzle display      */
+  /* ============================================ */
+  .image-card {
+    position: relative;
+    text-align: center;
+    padding: 24px;
+  }
+  
+  .memorize-hint {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+  }
+  
+  #banana-image {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* ============================================ */
+  /* ANSWER SECTION                               */
+  /* ============================================ */
+  #answer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  #answer-section label {
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+  
+  #answer-input {
+    padding: 14px 18px;
+    border: 2px solid var(--accent);
+    border-radius: var(--border-radius-sm);
+    font-family: inherit;
+    font-size: 1rem;
+    background: var(--input-bg);
+    color: var(--text-dark);
+  }
+  
+  #answer-input:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+  
+  /* ============================================ */
+  /* RESULT MESSAGE - Correct/Wrong feedback      */
+  /* ============================================ */
+  #result-message {
+    text-align: center;
+  }
+  
+  #result-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  
+  #result-text.correct {
+    color: var(--success);
+  }
+  
+  #result-text.wrong {
+    color: var(--error);
+  }
+  
+  .solution-hint {
+    font-size: 0.95rem;
+    color: var(--text-light);
+  }
+  
+  /* ============================================ */
+  /* GAME OVER & LEADERBOARD                      */
+  /* ============================================ */
+  #game-over-section {
+    text-align: center;
+  }
+  
+  #game-over-section h2 {
+    margin-bottom: 16px;
+  }
+  
+  #final-score,
+  #final-level {
+    color: var(--primary);
+  }
+  
+  .leaderboard {
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 2px solid var(--accent);
+  }
+  
+  #leaderboard-list {
+    list-style: none;
+    text-align: left;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+  
+  #leaderboard-list li {
+    padding: 10px 16px;
+    margin-bottom: 8px;
+    background: var(--level-option-bg);
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+  }
+  
+  #leaderboard-list li:nth-child(1) {
+    border: 2px solid var(--primary);
+  }
+  
+  /* ============================================ */
+  /* CONFETTI - Game completion celebration       */
+  /* ============================================ */
+  .confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+  }
+  
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    animation: confettiFall 3s ease-out forwards;
+    opacity: 0;
+  }
+  
+  @keyframes confettiFall {
+    0% {
+      opacity: 1;
+      transform: translateY(-10px) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(100vh) rotate(720deg);
+    }
+  }
+  
+  /* ============================================ */
+  /* RESPONSIVE LAYOUT                            */
+  /* ============================================ */
+  @media (max-width: 480px) {
+    body {
+      padding: 10px;
+    }
+  
+    .section {
+      padding: 20px 16px;
+    }
+  
+    .settings-bar {
+      flex-wrap: wrap;
+      top: 8px;
+      right: 8px;
+      padding: 8px 12px;
+    }
+  
+    .theme-label {
+      display: none;
+    }
+  
+    #volume-slider {
+      width: 50px;
+    }
+  
+    h1 {
+      font-size: 1.5rem;
+    }
+  
+    .stats {
+      gap: 12px;
+    }
+  
+    .stat-box {
+      min-width: 70px;
+      padding: 10px 14px;
+    }
+  
+    .stat-value {
+      font-size: 1.2rem;
+    }
+  
+    .level-card {
+      padding: 20px 16px;
+    }
+  
+    .level-card-icon {
+      font-size: 2rem;
+    }
+  }
+  
