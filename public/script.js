@@ -7,8 +7,6 @@
  * 1) Auth Section   → Login/Signup → Level Selection
  * 2) Level Section  → Pick level → Guidelines Section
  * 3) Game Section   → Play → Game Over + Leaderboard
- *
- * Section switching: Only one section visible at a time.
  * Use showSection(sectionId) to hide all and show the selected one.
  */
 
@@ -33,7 +31,7 @@ const QUESTIONS_PER_GAME = 5;
 // ============================================
 // GAME STATE
 // ============================================
-let currentLevelKey = "easy";   // "easy" | "medium" | "hard"
+let currentLevelKey = "easy";  
 let currentScore = 0;
 let questionsAnswered = 0;
 let currentSolution = "";
@@ -45,9 +43,9 @@ let timerTimeout = null;
 // ============================================
 const sounds = {
   bgMusic: null,
-  ambience: null,
-  correct: null,
-  wrong: null
+  //ambience: null,
+  //correct: null,
+  //wrong: null
 };
 let soundOn = true;
 let musicOn = true;
@@ -75,11 +73,11 @@ function initSounds() {
   try {
     sounds.bgMusic = new Audio("sounds/bg-music.mp3");
     sounds.bgMusic.loop = true;
-    sounds.ambience = new Audio("sounds/ambience.mp3");
-    sounds.ambience.loop = true;
-    sounds.ambience.volume = 0.15;
-    sounds.correct = new Audio("sounds/correct.mp3");
-    sounds.wrong = new Audio("sounds/wrong.mp3");
+    //sounds.ambience = new Audio("sounds/ambience.mp3");
+    //sounds.ambience.loop = true;
+    //sounds.ambience.volume = 0.15;
+    //sounds.correct = new Audio("sounds/correct.mp3");
+    //sounds.wrong = new Audio("sounds/wrong.mp3");
   } catch (e) {
     console.warn("Sound files not found - game will work without audio");
   }
