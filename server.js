@@ -2,13 +2,6 @@
  * ============================================
  * BANANA MEMORY GAME - BACKEND SERVER
  * ============================================
- * 
- * This server handles:
- * - User authentication (signup/login with JWT)
- * - Banana API proxy (frontend never calls API directly)
- * - Score saving and leaderboard
- * 
- * Tech: Node.js, Express, MongoDB (Mongoose), bcrypt, JWT
  */
 
 const express = require("express");
@@ -36,8 +29,6 @@ const JWT_SECRET = "0123456789";
 // ============================================
 // MONGODB CONNECTION
 // ============================================
-// Replace with your actual MongoDB connection string from MongoDB Atlas
-// Example: mongodb+srv://username:password@cluster.mongodb.net/banana-game
 mongoose.connect("mongodb+srv://pasandiayodya04_db_user:vJ98bweMo6P4D8cK@banana.y0kxiud.mongodb.net/?appName=banana")
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
@@ -133,7 +124,7 @@ function authMiddleware(req, res, next) {
 // BANANA API PROXY ROUTE
 // ============================================
 // Frontend MUST NOT call Banana API directly. It calls THIS route instead.
-// We fetch from Banana API and return the data to the frontend.
+// I fetch from Banana API and return the data to the frontend.
 // This keeps API keys/URLs on the server and follows proper architecture.
 app.get("/puzzle", async (req, res) => {
   try {
@@ -320,7 +311,7 @@ app.post("/save-score", authMiddleware, async (req, res) => {
 app.get("/leaderboard", async (req, res) => {
   try {
     const topScores = await Score.find()
-      .sort({ score: -1 })   // Descending: highest first
+      .sort({ score: -1 })   // Descending order
       .limit(5)
       .populate("userId", "username");  // Get username from User
 
