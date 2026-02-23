@@ -90,28 +90,28 @@ function playBgMusic() {
   }
 }
 
-function playAmbience() {
-  if (musicOn && sounds.ambience) {
-    sounds.ambience.volume = Math.min(0.15, volume * 0.2);
-    sounds.ambience.play().catch(() => {});
-  }
-}
+//function playAmbience() {
+  //if (musicOn && sounds.ambience) {
+    //sounds.ambience.volume = Math.min(0.15, volume * 0.2);
+    //sounds.ambience.play().catch(() => {});
+  //}
+//}
 
-function playCorrect() {
-  if (soundOn && sounds.correct) {
-    sounds.correct.volume = volume;
-    sounds.correct.currentTime = 0;
-    sounds.correct.play().catch(() => {});
-  }
-}
+//function playCorrect() {
+  //if (soundOn && sounds.correct) {
+    //sounds.correct.volume = volume;
+    //sounds.correct.currentTime = 0;
+   // sounds.correct.play().catch(() => {});
+  //}
+//}
 
-function playWrong() {
-  if (soundOn && sounds.wrong) {
-    sounds.wrong.volume = volume;
-    sounds.wrong.currentTime = 0;
-    sounds.wrong.play().catch(() => {});
-  }
-}
+//function playWrong() {
+  //if (soundOn && sounds.wrong) {
+    //sounds.wrong.volume = volume;
+    //sounds.wrong.currentTime = 0;
+    //sounds.wrong.play().catch(() => {});
+  //}
+//}
 
 // ============================================
 // AUTH HELPERS - JWT & localStorage
